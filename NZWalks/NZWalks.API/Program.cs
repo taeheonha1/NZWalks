@@ -17,6 +17,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectionString"));
 });
 
+// Register Dependency Injection
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
 
 // AutoMapper
