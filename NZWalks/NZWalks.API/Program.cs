@@ -11,6 +11,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
+
 // Register DbContext
 builder.Services.AddDbContext<NZWalksDbContext>(options =>
 {
@@ -19,6 +25,7 @@ builder.Services.AddDbContext<NZWalksDbContext>(options =>
 
 // Register Dependency Injection
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+builder.Services.AddScoped<IWalkRepository, WalkRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

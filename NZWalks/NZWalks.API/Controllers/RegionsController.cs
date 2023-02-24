@@ -38,7 +38,7 @@ namespace NZWalks.API.Controllers
                     Area = region.Area,
                     Latitude = region.Latitude,
                     Longitude = region.Longitude,
-                    Population = region.Population
+                    Population = region.Populationw
                 };
 
                 regionsDTO.Add(regionDTO);
