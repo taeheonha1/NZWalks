@@ -11,6 +11,8 @@ namespace NZWalks.API.Controllers
     [ApiController]
     public class RegionsController : ControllerBase
     {
+
+        #region "CRUD"
         private readonly IRegionRepository _regionRepository;
 
         public IMapper _mapper { get; }
@@ -66,6 +68,12 @@ namespace NZWalks.API.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRegionAsync(Models.DTO.AddRegionRequest addRegionRequest)
         {
+            // Validate the request
+            if (!ValidateAddRegionAsync(addRegionRequest))
+            {
+                return BadRequest(ModelState);
+            }
+
             //Request (DTO) to Domain model
             var region = new Models.Domain.Region()
             {
@@ -95,6 +103,7 @@ namespace NZWalks.API.Controllers
             return CreatedAtAction(nameof(GetRegionAsync), new {id=regionDTO.Id}, regionDTO);
 
         }
+        
 
         [HttpDelete]
         [Route("{id:Guid}")]
@@ -128,6 +137,12 @@ namespace NZWalks.API.Controllers
         [Route("{id:Guid}")]
         public async Task<IActionResult> UpdateRegionAsync([FromRoute] Guid id, [FromBody] Models.DTO.UpdateRegionRequest updateRegionRequest)
         {
+            // Validate the request
+            if (!ValidateUpdateRegionAsync(updateRegionRequest))
+            {
+                return BadRequest(ModelState);
+            }
+
             // Convert DTO to Domain model
             // 1. Create a new Region Domain model
             var region = new Models.Domain.Region
@@ -166,5 +181,129 @@ namespace NZWalks.API.Controllers
             return Ok(regionDTO);
 
         }
+        
+        #endregion "CRUD"
+
+        #region "Validation"
+        private bool ValidateAddRegionAsync(Models.DTO.AddRegionRequest addRegionRequest)
+        {
+
+            if (addRegionRequest == null)
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Code),
+                    $"Add Region Data is required");
+                return false;
+            }
+
+            //Code in Models.DTO.AddRegionRequest class
+            if (string.IsNullOrWhiteSpace(addRegionRequest.Code))
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Code),
+                    $"{nameof(addRegionRequest.Code)} cannot be null, empty, or white space");
+            }
+
+            //Name in Models.DTO.AddRegionRequest class
+            if (string.IsNullOrWhiteSpace(addRegionRequest.Name))
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Name),
+                    $"{nameof(addRegionRequest.Name)} cannot be null, empty, or white space");
+            }
+
+            //Area in Models.DTO.AddRegionRequest class
+            if (addRegionRequest.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Area),
+                  $"{nameof(addRegionRequest.Area)} should be pasitive");
+            }
+
+            //Latitude in Models.DTO.AddRegionRequest class
+            if (addRegionRequest.Latitude <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Latitude),
+                  $"{nameof(addRegionRequest.Latitude)} should be pasitive");
+            }
+
+            //Longitude in Models.DTO.AddRegionRequest class
+            if (addRegionRequest.Longitude <= 0)
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Longitude),
+                  $"{nameof(addRegionRequest.Longitude)} should be pasitive");
+            }
+
+            //Population in Models.DTO.AddRegionRequest class
+            if (addRegionRequest.Population < 0)
+            {
+                ModelState.AddModelError(nameof(addRegionRequest.Population),
+                  $"{nameof(addRegionRequest.Population)} should be pasitive");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateUpdateRegionAsync(Models.DTO.UpdateRegionRequest updateRegionRequest)
+        {
+
+            if (updateRegionRequest == null)
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Code),
+                    $"Update Region Data is required");
+                return false;
+            }
+
+            //Code in Models.DTO.AddRegionRequest class
+            if (string.IsNullOrWhiteSpace(updateRegionRequest.Code))
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Code),
+                    $"{nameof(updateRegionRequest.Code)} cannot be null, empty, or white space");
+            }
+
+            //Name in Models.DTO.AddRegionRequest class
+            if (string.IsNullOrWhiteSpace(updateRegionRequest.Name))
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Name),
+                    $"{nameof(updateRegionRequest.Name)} cannot be null, empty, or white space");
+            }
+
+            //Area in Models.DTO.AddRegionRequest class
+            if (updateRegionRequest.Area <= 0)
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Area),
+                  $"{nameof(updateRegionRequest.Area)} should be pasitive");
+            }
+
+            //Latitude in Models.DTO.AddRegionRequest class
+            if (updateRegionRequest.Latitude <= 0)
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Latitude),
+                  $"{nameof(updateRegionRequest.Latitude)} should be pasitive");
+            }
+
+            //Longitude in Models.DTO.AddRegionRequest class
+            if (updateRegionRequest.Longitude <= 0)
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Longitude),
+                  $"{nameof(updateRegionRequest.Longitude)} should be pasitive");
+            }
+
+            //Population in Models.DTO.AddRegionRequest class
+            if (updateRegionRequest.Population < 0)
+            {
+                ModelState.AddModelError(nameof(updateRegionRequest.Population),
+                  $"{nameof(updateRegionRequest.Population)} should be pasitive");
+            }
+
+            if (ModelState.ErrorCount > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        #endregion "Validation"
+
     }
 }
